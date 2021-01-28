@@ -2,7 +2,7 @@ name: Automatic Rebase
 "on":
   pull_request:
     branches:
-      - develop
+      - main
 jobs:
   rebase:
     name: Rebase
