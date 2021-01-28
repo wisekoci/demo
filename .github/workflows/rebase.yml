@@ -1,7 +1,8 @@
 name: Automatic Rebase
-on:
-  issue_comment:
-    types: [created]
+"on":
+  pull_request:
+    branches:
+      - develop
 jobs:
   rebase:
     name: Rebase
