@@ -1,1 +1,3 @@
-const sidebar = "sidebar";
+let ale = 1;
+
+console.log(ale++);
