@@ -1,3 +1,3 @@
-let ale = 1;
+let ale = 2;
 
 console.log(ale++);
