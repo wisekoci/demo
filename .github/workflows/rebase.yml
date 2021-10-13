@@ -1,20 +1,26 @@
-name: Automatic Rebase
-"on":
+on:
+  # Run on every push on every branch
+  push:
+    branches-ignore:
+      # Ignore branches automatically created by github-rebase
+      - rebase-pull-request**
+      - cherry-pick-rebase-pull-request**
+  # Run when pull requests get labeled
   pull_request:
-    branches:
-      - main
+    types: [labeled]
+
 jobs:
-  rebase:
-    name: Rebase
-    if: github.event.issue.pull_request != '' && contains(github.event.comment.body, '/rebase')
+  auto-rebase:
+    name: AutoRebase
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the latest code
-        uses: actions/checkout@v2
+      - uses: Label305/AutoRebase@v0.1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0 # otherwise, you will fail to push refs to dest repo
-      - name: Automatic Rebase
-        uses: cirrus-actions/rebase@1.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # We can't use the built-in secrets.GITHUB_TOKEN yet because of this limitation:
+          # https://github.community/t5/GitHub-Actions/Triggering-a-new-workflow-from-another-workflow/td-p/31676
+          # In the meantime, use a token granting write access on the repo:
+          # - a GitHub App token
+          #   See https://github.com/marketplace/actions/github-app-token.
+          # - a personal access token
+          #   See https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line.
+          github_token: ${{ secrets.GITHUB_TOKEN }}
